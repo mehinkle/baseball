@@ -1,0 +1,58 @@
+import random
+import os
+import time
+
+# Grid size: 5 rows, 10 columns
+ROWS = 5
+COLS = 10
+
+# ANSI color codes
+GREEN = '\033[92m'
+RED = '\033[91m'
+RESET = '\033[0m'
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def print_grid(grid):
+    for row in grid:
+        print(' '.join(row))
+
+def create_grid_with_o(row_o, col_o, color):
+    grid = [['X' for _ in range(COLS)] for _ in range(ROWS)]
+    grid[row_o][col_o] = f'{color}O{RESET}'
+    return grid
+
+def play_round():
+    # 1. Show empty grid for 3 seconds
+    grid = [['X' for _ in range(COLS)] for _ in range(ROWS)]
+    clear_screen()
+    print_grid(grid)
+    time.sleep(3)
+
+    # 2. Place green O and show for 2 seconds
+    rand_row = random.randint(0, ROWS - 1)
+    rand_col = random.randint(0, COLS - 1)
+    green_grid = create_grid_with_o(rand_row, rand_col, GREEN)
+
+    clear_screen()
+    print_grid(green_grid)
+    for i in range(1, 0, -1):
+        print(f"\nGreen O time left: {i} sec", end='\r')
+        time.sleep(1)
+
+    # 3. Turn O red and hold
+    red_grid = create_grid_with_o(rand_row, rand_col, RED)
+    clear_screen()
+    print_grid(red_grid)
+    print("\nSTRRRRRRIIIIKKEEE")
+def main():
+    while True:
+        play_round()
+        choice = input("\nPlay again? (y/n): ").strip().lower()
+        if choice != 'y':
+            print("Goodbye!")
+            break
+
+if __name__ == "__main__":
+    main()
